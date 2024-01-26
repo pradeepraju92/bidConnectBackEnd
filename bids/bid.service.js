@@ -7,7 +7,6 @@ const db = require('_helpers/db');
 module.exports = {
     create,
     delete: _delete,
-    update,
     getAll,
     getCompanyById
 };
@@ -44,30 +43,10 @@ async function create(params) {
     }*/
 
     // save user
-    return await db.Company.create(params);
+    return await db.Bid.create(params);
     //return await db.Company.findOne({where : {companyName: params.companyName, zip: params.zip}}); 
 }
 
-async function update(id, params) {
-    const user = await getUser(id);
-
-    // validate
-    const usernameChanged = params.username && user.username !== params.username;
-    if (usernameChanged && await db.User.findOne({ where: { username: params.username } })) {
-        throw 'Username "' + params.username + '" is already taken';
-    }
-
-    // hash password if it was entered
-    if (params.password) {
-        params.hash = await bcrypt.hash(params.password, 10);
-    }
-
-    // copy params to user and save
-    Object.assign(user, params);
-    await user.save();
-
-    return omitHash(user.get());
-}
 
 async function _delete(id) {
     const company = await getCompany(id);

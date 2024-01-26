@@ -13,6 +13,8 @@ app.use(cors());
 app.use('/users', require('./users/users.controller'));
 app.use('/company',require('./companyDetails/company.controller'));
 app.use('/job',require('./jobDesc/job.controller'));
+app.use('/project',require('./project/project.controller'));
+app.use('/bids',require('./bids/bid.controller'));
 
 // global error handler
 app.use(errorHandler);

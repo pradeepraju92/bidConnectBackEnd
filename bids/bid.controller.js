@@ -4,7 +4,7 @@ const Joi = require('joi');
 
 const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
-const companyService = require('./company.service');
+const bidService = require('./bid.service');
 
 // routes
 _router.post('/authenticate', authenticateSchema, authenticate);
@@ -33,20 +33,16 @@ function authenticate(req, res, next) {
 
 function registerSchema(req, res, next) {
     const schema = Joi.object({
-        companyName: Joi.string().required(),
-        address: Joi.string().required(),
-        city: Joi.string().required(),
-        state: Joi.string().required(),
-        zip: Joi.number().required(),
-        gstNbr: Joi.string().required(),
-        cinNbr: Joi.string().required(),
-        panNbr: Joi.string().required(),
+        title: Joi.string().required(),
+        keywords: Joi.string().required(),
+        companyId: Joi.string().required(),
+        projectId: Joi.string().required()
     });
     validateRequest(req, next, schema);
 }
 
 function register(req, res, next) {
-    companyService.create(req.body)
+    bidService.create(req.body)
         .then(company => res.json(company))
         .catch(next);
 }

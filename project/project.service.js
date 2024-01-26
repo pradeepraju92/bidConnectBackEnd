@@ -44,7 +44,7 @@ async function create(params) {
     }*/
 
     // save user
-    return await db.Company.create(params);
+    return await db.Project.create(params);
     //return await db.Company.findOne({where : {companyName: params.companyName, zip: params.zip}}); 
 }
 

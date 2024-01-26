@@ -22,11 +22,15 @@ async function initialize() {
     db.User = require('../users/user.model')(sequelize);
     db.Company = require('../companyDetails/company.model')(sequelize);
     db.Job = require('../jobDesc/job.model')(sequelize);
+    db.Project = require('../project/project.model')(sequelize);
+    db.Bid = require('../bids/bid.model')(sequelize);
 
     // sync all models with database
     await db.User.sync({ alter: true });
     await db.Company.sync({alter: true});
     await db.Job.sync({alter:true});
+    await db.Project.sync({alter:true});
+    await db.Bid.sync({alter:true});
     //await sequelize.sync({ alter: true });
     //insert default values for job description
     //await insertIntoJob();
