@@ -1,11 +1,11 @@
 {
-    "name": "node-mssql-registration-login-api",
+    "name": "tt-backend",
     "version": "1.0.0",
-    "description": "Node.js + MS SQL Server - Simple API for Authentication, Registration and User Management",
+    "description": "TenTenders backend",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/cornflourblue/node-mssql-registration-login-api.git"
+        "url": ""
     },
     "scripts": {
         "start": "node ./server.js",
@@ -19,6 +19,7 @@
         "joi": "^17.6.0",
         "jsonwebtoken": "^9.0.2",
         "mongodb": "6.3",
+        "punycode": "^2.3.1",
         "rootpath": "^0.1.2",
         "sequelize": "^6.21.0",
         "tedious": "^14.6.0"

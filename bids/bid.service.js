@@ -3,14 +3,28 @@ const bcrypt = require('bcryptjs');
 
 const { secret } = require('config.json');
 const db = require('_helpers/db');
-
+const { MongoClient } = require('mongodb');
+const uri = "";
+const mongoClient = new MongoClient(uri);
 module.exports = {
     create,
     delete: _delete,
     getAll,
-    getCompanyById
+    getCompanyById,
+    insertDoc
 };
 
+async function insertDoc(doc){
+    //try{
+        const database = mongoClient.db("TenTenders")
+        const project = database.collection("project");
+        const result = await project.insertOne(doc);
+        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    //}
+    /*finally{
+        await client.close();
+    }*/
+}
 
 async function authenticate({ username, password }) {
     const user = await db.User.scope('withHash').findOne({ where: { username } });

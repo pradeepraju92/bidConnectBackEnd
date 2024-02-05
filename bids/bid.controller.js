@@ -5,6 +5,8 @@ const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const bidService = require('./bid.service');
+// Replace the uri string with your MongoDB deployment's connection string.
+
 
 // routes
 _router.post('/authenticate', authenticateSchema, authenticate);
@@ -14,8 +16,15 @@ _router.get('/current', authorize(), getCurrent);
 _router.get('/:id', getCompanyById);
 _router.put('/:id', authorize(), updateSchema, update);
 _router.delete('/:id', _delete);
+_router.post('/insertProject', insertProject);
 
 module.exports = _router;
+
+function insertProject(req,res,next){
+    bidService.insertDoc(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
 
 function authenticateSchema(req, res, next) {
     const schema = Joi.object({
