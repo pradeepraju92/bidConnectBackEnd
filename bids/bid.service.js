@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const { secret } = require('config.json');
 const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://pradeepraju92:NyhyG6X43dRGIdOp@cluster0.iqmwu0t.mongodb.net/";
+const uri = "";
 const mongoClient = new MongoClient(uri);
 module.exports = {
     create,
