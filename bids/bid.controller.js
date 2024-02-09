@@ -17,8 +17,15 @@ _router.get('/:id', getCompanyById);
 _router.put('/:id', authorize(), updateSchema, update);
 _router.delete('/:id', _delete);
 _router.post('/insertProject', insertProject);
+_router.post('/sendEmail', sendEmail);
 
 module.exports = _router;
+
+function sendEmail(req,res,next){
+    bidService.sendEmail(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
 
 function insertProject(req,res,next){
     bidService.insertDoc(req.body)

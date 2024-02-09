@@ -19,6 +19,7 @@
         "joi": "^17.6.0",
         "jsonwebtoken": "^9.0.2",
         "mongodb": "6.3",
+        "nodemailer": "^6.9.9",
         "punycode": "^2.3.1",
         "rootpath": "^0.1.2",
         "sequelize": "^6.21.0",

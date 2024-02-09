@@ -1,19 +1,43 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+const nodemailer = require('nodemailer');
 const { secret } = require('config.json');
 const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
-const uri = "";
+const uri = "mongodb+srv://pradeepraju92:NyhyG6X43dRGIdOp@cluster0.iqmwu0t.mongodb.net/";
 const mongoClient = new MongoClient(uri);
 module.exports = {
     create,
     delete: _delete,
     getAll,
     getCompanyById,
-    insertDoc
+    insertDoc,
+    sendEmail
 };
-
+async function sendEmail(params){
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: '10tenders.business@gmail.com',
+          pass: ''
+        }
+      });
+      
+      var mailOptions = {
+        from: '10tenders.business@gmail.com',
+        to: params.email,
+        subject: params.subject,
+        text: params.body
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+}
 async function insertDoc(doc){
     //try{
         const database = mongoClient.db("TenTenders")
