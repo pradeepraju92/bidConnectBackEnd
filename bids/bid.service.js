@@ -4,22 +4,23 @@ const nodemailer = require('nodemailer');
 const { secret } = require('config.json');
 const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
-const uri = "";
+const uri = "mongodb+srv://pradeepraju92:NyhyG6X43dRGIdOp@cluster0.iqmwu0t.mongodb.net/";
 const mongoClient = new MongoClient(uri);
 module.exports = {
     create,
     delete: _delete,
     getAll,
-    getCompanyById,
+    getBidById,
     insertDoc,
-    sendEmail
+    sendEmail,
+    getProjectDoc
 };
 async function sendEmail(params){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
           user: '10tenders.business@gmail.com',
-          pass: ''
+          pass: 'gacvyubcodqptdir'
         }
       });
       
@@ -65,8 +66,8 @@ async function getAll() {
     return await db.Company.findAll();
 }
 
-async function getCompanyById(id) {
-    return await getCompany(id);
+async function getBidById(id) {
+    return await getBid(id);
 }
 
 async function create(params) {
@@ -93,10 +94,18 @@ async function _delete(id) {
 
 // helper functions
 
-async function getCompany(id) {
-    const company = await db.Company.findByPk(id);
-    if (!company) throw 'Company not found';
-    return company;
+async function getBid(id) {
+    const bid = await db.Bid.findByPk(id);
+    if (!bid) throw 'Bid not found';
+    return bid;
+}
+
+async function getProjectDoc(projectId,bidId) {
+    const database = mongoClient.db("TenTenders")
+    const project = database.collection("project");
+    const query = {_schemaType:"project",_projectId:projectId,_bidId:bidId}
+    const result = await project.findOne(query);
+    return result;
 }
 
 function omitHash(user) {

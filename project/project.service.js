@@ -9,7 +9,7 @@ module.exports = {
     delete: _delete,
     update,
     getAll,
-    getCompanyById
+    getProjectById
 };
 
 
@@ -28,8 +28,8 @@ async function getAll() {
     return await db.Company.findAll();
 }
 
-async function getCompanyById(id) {
-    return await getCompany(id);
+async function getProjectById(id) {
+    return await getProject(id);
 }
 
 async function create(params) {
@@ -76,10 +76,10 @@ async function _delete(id) {
 
 // helper functions
 
-async function getCompany(id) {
-    const company = await db.Company.findByPk(id);
-    if (!company) throw 'Company not found';
-    return company;
+async function getProject(id) {
+    const project = await db.Project.findByPk(id);
+    if (!project) throw 'Project not found';
+    return project;
 }
 
 function omitHash(user) {

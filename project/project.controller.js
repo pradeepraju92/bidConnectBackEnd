@@ -11,7 +11,7 @@ _router.post('/authenticate', authenticateSchema, authenticate);
 _router.post('/register', registerSchema, register);
 _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
-_router.get('/:id', getCompanyById);
+_router.get('/:id', getProjectById);
 _router.put('/:id', authorize(), updateSchema, update);
 _router.delete('/:id', _delete);
 
@@ -60,8 +60,8 @@ function getCurrent(req, res, next) {
     res.json(req.user);
 }
 
-function getCompanyById(req, res, next) {
-    companyService.getCompanyById(req.params.id)
+function getProjectById(req, res, next) {
+    projectService.getProjectById(req.params.id)
         .then(user => res.json(user))
         .catch(next);
 }

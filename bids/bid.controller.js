@@ -13,8 +13,8 @@ _router.post('/authenticate', authenticateSchema, authenticate);
 _router.post('/register', registerSchema, register);
 _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
-_router.get('/:id', getCompanyById);
-_router.put('/:id', authorize(), updateSchema, update);
+_router.get('/:id', getBidById);
+_router.get('/:projectId/:bidId',getProjectDoc);
 _router.delete('/:id', _delete);
 _router.post('/insertProject', insertProject);
 _router.post('/sendEmail', sendEmail);
@@ -73,11 +73,18 @@ function getCurrent(req, res, next) {
     res.json(req.user);
 }
 
-function getCompanyById(req, res, next) {
-    companyService.getCompanyById(req.params.id)
+function getBidById(req, res, next) {
+    bidService.getBidById(req.params.id)
         .then(user => res.json(user))
         .catch(next);
 }
+
+function getProjectDoc(req, res, next) {
+    bidService.getProjectDoc(req.params.projectId,req.params.bidId)
+        .then(user => res.json(user))
+        .catch(next);
+}
+
 
 function updateSchema(req, res, next) {
     const schema = Joi.object({
