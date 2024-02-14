@@ -9,7 +9,8 @@ module.exports = {
     delete: _delete,
     update,
     getAll,
-    getProjectById
+    getProjectById,
+    getAllProjects
 };
 
 
@@ -30,6 +31,12 @@ async function getAll() {
 
 async function getProjectById(id) {
     return await getProject(id);
+}
+
+async function getAllProjects(params){
+    return await db.Project.findAll({
+        where : { companyId: params.companyId}
+    });
 }
 
 async function create(params) {

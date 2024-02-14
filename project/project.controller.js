@@ -12,6 +12,7 @@ _router.post('/register', registerSchema, register);
 _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
 _router.get('/:id', getProjectById);
+_router.post('/getAllProjectForCompany', getProjectByCompany);
 _router.put('/:id', authorize(), updateSchema, update);
 _router.delete('/:id', _delete);
 
@@ -46,6 +47,12 @@ function registerSchema(req, res, next) {
 
 function register(req, res, next) {
     projectService.create(req.body)
+        .then(company => res.json(company))
+        .catch(next);
+}
+
+function getProjectByCompany(req,res,next){
+    projectService.getAllProjects(req.body)
         .then(company => res.json(company))
         .catch(next);
 }

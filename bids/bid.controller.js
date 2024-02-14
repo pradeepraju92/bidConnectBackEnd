@@ -18,11 +18,25 @@ _router.get('/:projectId/:bidId',getProjectDoc);
 _router.delete('/:id', _delete);
 _router.post('/insertProject', insertProject);
 _router.post('/sendEmail', sendEmail);
+_router.post('/getBidByProject', getBidByProject);
+_router.post('/getVendorById', getSubmittedVendorById);
 
 module.exports = _router;
 
 function sendEmail(req,res,next){
     bidService.sendEmail(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
+
+function getSubmittedVendorById(req,res,next){
+    bidService.getSubmittedVendorById(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
+
+function getBidByProject(req,res,next){
+    bidService.getBidByProject(req.body)
     .then(user => res.json(user))
     .catch(next);
 }

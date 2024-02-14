@@ -13,8 +13,11 @@ module.exports = {
     getBidById,
     insertDoc,
     sendEmail,
-    getProjectDoc
+    getProjectDoc,
+    getBidByProject,
+    getSubmittedVendorById
 };
+
 async function sendEmail(params){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -40,15 +43,24 @@ async function sendEmail(params){
       });
 }
 async function insertDoc(doc){
-    //try{
         const database = mongoClient.db("TenTenders")
         const project = database.collection("project");
         const result = await project.insertOne(doc);
-        console.log(`A document was inserted with the _id: ${result.insertedId}`);
-    //}
-    /*finally{
-        await client.close();
-    }*/
+}
+
+async function getSubmittedVendorById(params){
+    const resArray = [];
+    const database = mongoClient.db("TenTenders")
+    const project = database.collection("project");
+    const query = { "_bidId":params.bidId,"_projectId":params.projectId,"_schemaType":"vendor"};
+    const result = await project.find(query);
+    if ((await project.countDocuments(query)) === 0) {
+        return {}
+      }
+      for await(const doc of result){
+        resArray.push(doc);
+      }
+    return resArray;
 }
 
 async function authenticate({ username, password }) {
@@ -68,6 +80,12 @@ async function getAll() {
 
 async function getBidById(id) {
     return await getBid(id);
+}
+
+async function getBidByProject(params) {
+    return await db.Bid.findAll({
+        where : { projectId: params.id }
+    });
 }
 
 async function create(params) {
