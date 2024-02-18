@@ -18,7 +18,11 @@ function model(sequelize) {
         scopes: {
             // include hash with this scope
             withHash: { attributes: {}, }
-        }
+        },
+        indexes: [{
+            unique: true,
+            fields: ['bidId', 'email']
+        }]
     };
 
     return sequelize.define('VendorBidInvite', attributes, options);

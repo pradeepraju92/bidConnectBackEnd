@@ -9,8 +9,9 @@ const vendorBidInviteService = require('./vendorBidInvite.service');
 // routes
 _router.post('/authenticate', authenticateSchema, authenticate);
 _router.post('/register', registerSchema, register);
+_router.post('/bulkRegister', registerBulkSchema, bulkRegister);
 _router.get('/getAll',  getAll);
-_router.get('/getByBidId/:id', getByBidId);
+_router.get('/listByBidId/:id', listByBidId);
 
 module.exports = _router;
 
@@ -38,8 +39,24 @@ function registerSchema(req, res, next) {
     validateRequest(req, next, schema);
 }
 
+function registerBulkSchema(req, res, next) {
+    const schema = Joi.array().items(Joi.object({
+        email: Joi.string().required(),
+        lastInviteSentAt: Joi.date().required(),
+        bidId: Joi.number().required(),
+        inviteAccepted: Joi.string(),
+    }));
+    validateRequest(req, next, schema);
+}
+
 function register(req, res, next) {
     vendorBidInviteService.create(req.body)
+        .then(invite => res.json(invite))
+        .catch(next);
+}
+
+function bulkRegister(req, res, next) {
+    vendorBidInviteService.bulkCreate(req.body)
         .then(invite => res.json(invite))
         .catch(next);
 }
@@ -50,8 +67,8 @@ function getAll(req, res, next) {
         .catch(next);
 }
 
-function getByBidId(req, res, next) {
-    vendorBidInviteService.getByBidId(req.params.id)
+function listByBidId(req, res, next) {
+    vendorBidInviteService.listByBidId(req.params.id)
         .then(invite => res.json(invite))
         .catch(next);
 }
