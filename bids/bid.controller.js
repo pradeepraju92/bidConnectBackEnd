@@ -19,6 +19,7 @@ _router.delete('/:id', _delete);
 _router.post('/insertProject', insertProject);
 _router.post('/sendEmail', sendEmail);
 _router.post('/getBidByProject', getBidByProject);
+_router.post('/getBidDetailByProject', getBidDetailByProject);
 _router.post('/getVendorById', getSubmittedVendorById);
 
 module.exports = _router;
@@ -37,6 +38,12 @@ function getSubmittedVendorById(req,res,next){
 
 function getBidByProject(req,res,next){
     bidService.getBidByProject(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
+
+function getBidDetailByProject(req,res,next){
+    bidService.getBidDetailByProject(req.body)
     .then(user => res.json(user))
     .catch(next);
 }

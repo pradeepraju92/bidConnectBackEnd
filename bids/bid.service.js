@@ -15,6 +15,7 @@ module.exports = {
     sendEmail,
     getProjectDoc,
     getBidByProject,
+    getBidDetailByProject,
     getSubmittedVendorById
 };
 
@@ -88,6 +89,22 @@ async function getBidByProject(params) {
     });
 }
 
+async function getBidDetailByProject(params) {
+    //TODO this function should list bids along with invite and other additional information
+    /*return await db.Bid.findAll({
+        include: [{
+            model: db.VendorBidInvite,
+            required: false,
+            where: { bidId: id }
+        }],
+        where: { projectId: params.id }
+    });*/
+
+    return await db.Bid.findAll({
+        where : { projectId: params.id }
+    });
+}
+
 async function create(params) {
     // validate
     /*if (await db.User.findOne({ where: { username: params.username } })) {
@@ -118,6 +135,7 @@ async function getBid(id) {
     return bid;
 }
 
+
 async function getProjectDoc(projectId,bidId) {
     const database = mongoClient.db("TenTenders")
     const project = database.collection("project");
@@ -129,4 +147,9 @@ async function getProjectDoc(projectId,bidId) {
 function omitHash(user) {
     const { hash, ...userWithoutHash } = user;
     return userWithoutHash;
+}
+
+
+function logVendorInvite(params) {
+    db.VendorBidInvite.create(params);
 }
