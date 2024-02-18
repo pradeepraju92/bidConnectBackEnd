@@ -26,6 +26,7 @@ async function initialize() {
     db.Job = require('../jobDesc/job.model')(sequelize);
     db.Project = require('../project/project.model')(sequelize);
     db.Bid = require('../bids/bid.model')(sequelize);
+    db.VendorBidInvite = require('../vendorBidInvite/vendorBidInvite.model')(sequelize);
 
     // sync all models with database
     await db.User.sync({ alter: true });
@@ -33,6 +34,7 @@ async function initialize() {
     await db.Job.sync({alter:true});
     await db.Project.sync({alter:true});
     await db.Bid.sync({alter:true});
+    await db.VendorBidInvite.sync({alter:true});
     //await sequelize.sync({ alter: true });
     //insert default values for job description
     //await insertIntoJob();
