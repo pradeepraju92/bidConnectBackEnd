@@ -19,7 +19,7 @@ _router.delete('/:id', _delete);
 _router.post('/insertProject', insertProject);
 _router.post('/sendEmail', sendEmail);
 _router.post('/getBidByProject', getBidByProject);
-_router.post('/getBidDetailByProject', getBidDetailByProject);
+_router.post('/listBidDetailByProject', listBidDetailByProject);
 _router.post('/getVendorById', getSubmittedVendorById);
 
 module.exports = _router;
@@ -42,8 +42,9 @@ function getBidByProject(req,res,next){
     .catch(next);
 }
 
-function getBidDetailByProject(req,res,next){
-    bidService.getBidDetailByProject(req.body)
+function listBidDetailByProject(req,res,next){
+    //TODO get more columns from other models to show in bid listing page.
+    bidService.getBidByProject(req.body)
     .then(user => res.json(user))
     .catch(next);
 }

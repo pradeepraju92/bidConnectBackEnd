@@ -15,7 +15,6 @@ module.exports = {
     sendEmail,
     getProjectDoc,
     getBidByProject,
-    getBidDetailByProject,
     getSubmittedVendorById
 };
 
@@ -84,22 +83,6 @@ async function getBidById(id) {
 }
 
 async function getBidByProject(params) {
-    return await db.Bid.findAll({
-        where : { projectId: params.id }
-    });
-}
-
-async function getBidDetailByProject(params) {
-    //TODO this function should list bids along with invite and other additional information
-    /*return await db.Bid.findAll({
-        include: [{
-            model: db.VendorBidInvite,
-            required: false,
-            where: { bidId: id }
-        }],
-        where: { projectId: params.id }
-    });*/
-
     return await db.Bid.findAll({
         where : { projectId: params.id }
     });
