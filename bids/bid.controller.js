@@ -6,7 +6,24 @@ const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const bidService = require('./bid.service');
 // Replace the uri string with your MongoDB deployment's connection string.
+const multer = require("multer");
 
+//storage options for file upload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    }
+  });
+  
+  const upload = multer({
+    storage,
+    limits: {
+      fileSize: 1000000 // 1MB
+    }
+  });
 
 // routes
 _router.post('/authenticate', authenticateSchema, authenticate);
@@ -21,6 +38,11 @@ _router.post('/sendEmail', sendEmail);
 _router.post('/getBidByProject', getBidByProject);
 _router.post('/listBidDetailByProject', listBidDetailByProject);
 _router.post('/getVendorById', getSubmittedVendorById);
+_router.post('/uploadFile', upload.single('files'),function(req,res,next){
+    bidService.uploadFile(req)
+    .then(user => res.json(user))
+    .catch(next);
+});
 
 module.exports = _router;
 
@@ -41,6 +63,7 @@ function getBidByProject(req,res,next){
     .then(user => res.json(user))
     .catch(next);
 }
+
 
 function listBidDetailByProject(req,res,next){
     //TODO get more columns from other models to show in bid listing page.
