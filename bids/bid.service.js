@@ -6,6 +6,7 @@ const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
 const uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1";
 const mongoClient = new MongoClient(uri);
+
 module.exports = {
     create,
     delete: _delete,
@@ -15,7 +16,8 @@ module.exports = {
     sendEmail,
     getProjectDoc,
     getBidByProject,
-    getSubmittedVendorById
+    getSubmittedVendorById,
+    uploadFile
 };
 
 async function sendEmail(params){
@@ -45,7 +47,13 @@ async function sendEmail(params){
 async function insertDoc(doc){
         const database = mongoClient.db("TenTenders")
         const project = database.collection("project");
-        const result = await project.insertOne(doc);
+        const filter = {_schemaType:"vendor",_projectId:doc['_projectId'],_bidId:doc['_bidId'],_vendorId:doc['_vendorId']};
+        const options = {upsert: true};
+        const result = await project.updateOne(filter,doc,options);
+}
+
+async function uploadFile(params){
+    return {}
 }
 
 async function getSubmittedVendorById(params){
@@ -62,6 +70,7 @@ async function getSubmittedVendorById(params){
       }
     return resArray;
 }
+
 
 async function authenticate({ username, password }) {
     const user = await db.User.scope('withHash').findOne({ where: { username } });
