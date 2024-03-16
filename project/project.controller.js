@@ -34,13 +34,23 @@ function authenticate(req, res, next) {
 
 function registerSchema(req, res, next) {
     const schema = Joi.object({
+        internalId: Joi.string(),
         title: Joi.string().required(),
-        startDate: Joi.string().required(),
-        endDate: Joi.string().required(),
         size: Joi.string().required(),
-        architect: Joi.string().required(),
-        desc: Joi.string().required(),
+        isArchitect: Joi.boolean(),
+        jobWalkDate: Joi.string(),
+        jobName1: Joi.string(),
+        jobNo1: Joi.string(),
+        jobName2: Joi.string(),
+        jobNo2: Joi.string(),
         companyId: Joi.number().required(),
+        desc: Joi.string(),
+        isPublic: Joi.boolean(),
+        isPrivate: Joi.boolean(),
+        clName: Joi.string(),
+        clProjLead: Joi.string(),
+        clDueDate: Joi.string(),
+        clNotes: Joi.string()
     });
     validateRequest(req, next, schema);
 }

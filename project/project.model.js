@@ -4,13 +4,23 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        internalId: { type: DataTypes.STRING, allowNull: true },
         title: { type: DataTypes.STRING, allowNull: false },
-        startDate: { type: DataTypes.STRING, allowNull: false },
-        endDate: { type: DataTypes.STRING, allowNull: false },
-        size: { type: DataTypes.STRING, allowNull: true },
-        architect: { type: DataTypes.STRING, allowNull: true },
+        size: { type: DataTypes.STRING, allowNull: false },
+        isArchitect: { type: DataTypes.BOOLEAN, allowNull: true },
+        jobWalkDate: { type: DataTypes.STRING, allowNull: true },
+        jobName1: { type: DataTypes.STRING, allowNull: true },
+        jobNo1: { type: DataTypes.STRING, allowNull: true },
+        jobName2: { type: DataTypes.STRING, allowNull: true },
+        jobNo2: { type: DataTypes.STRING, allowNull: true },
+        companyId: { type: DataTypes.INTEGER, allowNull: false },
         desc: { type: DataTypes.STRING, allowNull: true },
-        companyId: { type: DataTypes.INTEGER, allowNull: true }
+        isPublic: { type: DataTypes.BOOLEAN, allowNull: true },
+        isPrivate: { type: DataTypes.BOOLEAN, allowNull: true },
+        clName: { type: DataTypes.STRING, allowNull: true },
+        clProjLead: { type: DataTypes.STRING, allowNull: true },
+        clProjDueDate: { type: DataTypes.STRING, allowNull: true },
+        clNotes: { type: DataTypes.STRING, allowNull: true }
     };
 
     const options = {
