@@ -16,6 +16,7 @@ router.put('/updateJob/:username',updateJob);
 router.get('/:id', authorize(), getById);
 router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id', _delete);
+router.post('/getAllInComp',getAllInComp);
 
 module.exports = router;
 
@@ -51,6 +52,11 @@ function register(req, res, next) {
 
 function getAll(req, res, next) {
     userService.getAll()
+        .then(users => res.json(users))
+        .catch(next);
+}
+function getAllInComp(req, res, next) {
+    userService.getAllInComp(req.body)
         .then(users => res.json(users))
         .catch(next);
 }

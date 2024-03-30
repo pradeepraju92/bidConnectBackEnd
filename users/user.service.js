@@ -7,6 +7,7 @@ const db = require('_helpers/db');
 module.exports = {
     authenticate,
     getAll,
+    getAllInComp,
     getById,
     create,
     update,
@@ -68,6 +69,12 @@ async function update(id, params) {
     await user.save();
 
     return omitHash(user.get());
+}
+
+async function getAllInComp(params){
+    const user = await db.User.findAll({ where: {companyId:params['companyId']}});
+    if (!user) throw 'User not found';
+    return user;
 }
 
 async function updateCompany(username,params){
