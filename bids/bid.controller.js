@@ -31,13 +31,14 @@ _router.post('/register', registerSchema, register);
 _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
 _router.get('/:id', getBidById);
-_router.get('/:projectId/:bidId',getProjectDoc);
+_router.get('/:projectId/:bidId/:schemaType',getProjectDoc);
 _router.delete('/:id', _delete);
-_router.post('/insertProject', insertProject);
+_router.post('/insertDoc', insertDoc);
 _router.post('/sendEmail', sendEmail);
 _router.post('/getBidByProject', getBidByProject);
 _router.post('/listBidDetailByProject', listBidDetailByProject);
 _router.post('/getVendorById', getSubmittedVendorById);
+_router.post('/getFileList', getFileList);
 _router.post('/uploadFile', upload.single('files'),function(req,res,next){
     bidService.uploadFile(req)
     .then(user => res.json(user))
@@ -64,6 +65,12 @@ function getBidByProject(req,res,next){
     .catch(next);
 }
 
+function getFileList(req,res,next){
+    //console.log(req);
+    bidService.getFileList(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
 
 function listBidDetailByProject(req,res,next){
     //TODO get more columns from other models to show in bid listing page.
@@ -72,7 +79,7 @@ function listBidDetailByProject(req,res,next){
     .catch(next);
 }
 
-function insertProject(req,res,next){
+function insertDoc(req,res,next){
     bidService.insertDoc(req.body)
     .then(user => res.json(user))
     .catch(next);
@@ -97,7 +104,17 @@ function registerSchema(req, res, next) {
         title: Joi.string().required(),
         keywords: Joi.string().required(),
         companyId: Joi.string().required(),
-        projectId: Joi.string().required()
+        projectId: Joi.string().required(),
+        pkgLead: Joi.string(),
+        pkgCost: Joi.string(),
+        pkgInstructions: Joi.string(),
+        bidDueDate: Joi.string(),
+        bidWalkDate: Joi.string(),
+        rfiDueDate: Joi.string(),
+        bidContactName: Joi.string(),
+        bidPhone: Joi.string(),
+        bidEmail: Joi.string(),
+        revisionNo: Joi.string()
     });
     validateRequest(req, next, schema);
 }
@@ -125,7 +142,7 @@ function getBidById(req, res, next) {
 }
 
 function getProjectDoc(req, res, next) {
-    bidService.getProjectDoc(req.params.projectId,req.params.bidId)
+    bidService.getProjectDoc(req.params.projectId,req.params.bidId,req.params.schemaType)
         .then(user => res.json(user))
         .catch(next);
 }

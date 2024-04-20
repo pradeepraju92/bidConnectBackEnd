@@ -6,6 +6,8 @@ const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
 const uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1";
 const mongoClient = new MongoClient(uri);
+const fs = require('fs');
+const fsp = require('fs/promises');
 
 module.exports = {
     create,
@@ -17,7 +19,8 @@ module.exports = {
     getProjectDoc,
     getBidByProject,
     getSubmittedVendorById,
-    uploadFile
+    uploadFile,
+    getFileList
 };
 
 async function sendEmail(params){
@@ -47,12 +50,25 @@ async function sendEmail(params){
 async function insertDoc(doc){
         const database = mongoClient.db("TenTenders")
         const project = database.collection("project");
-        const filter = {_schemaType:"vendor",_projectId:doc['_projectId'],_bidId:doc['_bidId'],_vendorId:doc['_vendorId']};
+        const filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId']};
         const options = {upsert: true};
-        const result = await project.updateOne(filter,doc,options);
+        const result = await project.updateOne(filter,{$set: doc},options);
+        return result;
+        //return await project.insertOne(doc);
 }
 
 async function uploadFile(params){
+    var oldPath='./uploads/' + params['file']['originalname'];
+    var newPath='./files/' + params['body']['projectId'] + '/' + params['body']['bidId'] + '/' + params['file']['originalname'];
+    var dir='./files/' + params['body']['projectId'] + '/' + params['body']['bidId'];
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.rename(oldPath, newPath, function (err) {
+        if (err) throw err
+        console.log('Successfully renamed - AKA moved!')
+      })
+    console.log(params['body']['bidId']);
     return {}
 }
 
@@ -97,6 +113,14 @@ async function getBidByProject(params) {
     });
 }
 
+async function getFileList(params) {
+    var fileList = [];
+    //console.log(params);
+    const folder = './files/' + params['projectId'] + '/' + params['bidId'] + '/';
+    console.log(folder);
+    return await fsp.readdir(folder);
+}
+
 async function create(params) {
     // validate
     /*if (await db.User.findOne({ where: { username: params.username } })) {
@@ -128,10 +152,10 @@ async function getBid(id) {
 }
 
 
-async function getProjectDoc(projectId,bidId) {
+async function getProjectDoc(projectId,bidId,schemaType) {
     const database = mongoClient.db("TenTenders")
     const project = database.collection("project");
-    const query = {_schemaType:"project",_projectId:projectId,_bidId:bidId}
+    const query = {_schemaType:schemaType,_projectId:projectId,_bidId:bidId}
     const result = await project.findOne(query);
     return result;
 }
