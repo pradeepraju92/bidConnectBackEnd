@@ -32,6 +32,7 @@ _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
 _router.get('/:id', getBidById);
 _router.get('/:projectId/:bidId/:schemaType',getProjectDoc);
+_router.post('/getAllProjectDoc', getAllProjectDoc);
 _router.delete('/:id', _delete);
 _router.post('/insertDoc', insertDoc);
 _router.post('/sendEmail', sendEmail);
@@ -39,6 +40,7 @@ _router.post('/getBidByProject', getBidByProject);
 _router.post('/listBidDetailByProject', listBidDetailByProject);
 _router.post('/getVendorById', getSubmittedVendorById);
 _router.post('/getFileList', getFileList);
+_router.post('/updateRev', updateRev);
 _router.post('/uploadFile', upload.single('files'),function(req,res,next){
     bidService.uploadFile(req)
     .then(user => res.json(user))
@@ -72,6 +74,13 @@ function getFileList(req,res,next){
     .catch(next);
 }
 
+function updateRev(req,res,next){
+    //console.log(req);
+    bidService.updateRev(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
+
 function listBidDetailByProject(req,res,next){
     //TODO get more columns from other models to show in bid listing page.
     bidService.getBidByProject(req.body)
@@ -81,6 +90,12 @@ function listBidDetailByProject(req,res,next){
 
 function insertDoc(req,res,next){
     bidService.insertDoc(req.body)
+    .then(user => res.json(user))
+    .catch(next);
+}
+
+function getAllProjectDoc(req,res,next){
+    bidService.getAllProjectDoc(req.body)
     .then(user => res.json(user))
     .catch(next);
 }

@@ -17,10 +17,12 @@ module.exports = {
     insertDoc,
     sendEmail,
     getProjectDoc,
+    getAllProjectDoc,
     getBidByProject,
     getSubmittedVendorById,
     uploadFile,
-    getFileList
+    getFileList,
+    updateRev
 };
 
 async function sendEmail(params){
@@ -50,7 +52,7 @@ async function sendEmail(params){
 async function insertDoc(doc){
         const database = mongoClient.db("TenTenders")
         const project = database.collection("project");
-        const filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId']};
+        const filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId'],_revNo:doc['_revNo']};
         const options = {upsert: true};
         const result = await project.updateOne(filter,{$set: doc},options);
         return result;
@@ -77,6 +79,7 @@ async function getSubmittedVendorById(params){
     const database = mongoClient.db("TenTenders")
     const project = database.collection("project");
     const query = { "_bidId":params.bidId,"_projectId":params.projectId,"_schemaType":"vendor"};
+    console.log(query);
     const result = await project.find(query);
     if ((await project.countDocuments(query)) === 0) {
         return {}
@@ -107,6 +110,12 @@ async function getBidById(id) {
     return await getBid(id);
 }
 
+async function updateRev(params) {
+    const bid = await db.Bid.findByPk(params.bidId);
+    bid.revisionNo = params.revNo;
+    return await bid.save();
+}
+
 async function getBidByProject(params) {
     return await db.Bid.findAll({
         where : { projectId: params.id }
@@ -117,8 +126,12 @@ async function getFileList(params) {
     var fileList = [];
     //console.log(params);
     const folder = './files/' + params['projectId'] + '/' + params['bidId'] + '/';
-    console.log(folder);
-    return await fsp.readdir(folder);
+    if (fs.existsSync(folder)) {
+        return await fsp.readdir(folder);
+    }
+    else{
+        return [];
+    }
 }
 
 async function create(params) {
@@ -159,6 +172,15 @@ async function getProjectDoc(projectId,bidId,schemaType) {
     const result = await project.findOne(query);
     return result;
 }
+
+async function getAllProjectDoc(params) {
+    const database = mongoClient.db("TenTenders")
+    const project = database.collection("project");
+    const query = {_schemaType:params['schemaType'],_projectId:params['projectId'],_bidId:params['bidId']};
+    const result = await project.find(query).toArray();
+    return result;
+}
+
 
 function omitHash(user) {
     const { hash, ...userWithoutHash } = user;

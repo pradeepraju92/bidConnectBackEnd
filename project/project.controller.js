@@ -3,7 +3,8 @@ const _router = express.Router();
 const Joi = require('joi');
 
 const validateRequest = require('_middleware/validate-request');
-const authorize = require('_middleware/authorize')
+const authorize = require('_middleware/authorize');
+const checkPermission = require('_middleware/checkPermission');
 const projectService = require('./project.service');
 
 // routes
@@ -12,7 +13,7 @@ _router.post('/register', registerSchema, register);
 _router.get('/getAll',  getAll);
 _router.get('/current', authorize(), getCurrent);
 _router.get('/:id', getProjectById);
-_router.post('/getAllProjectForCompany', getProjectByCompany);
+_router.post('/getAllProjectForCompany', checkPermission() , getProjectByCompany);
 _router.put('/:id', authorize(), updateSchema, update);
 _router.delete('/:id', _delete);
 
@@ -34,22 +35,22 @@ function authenticate(req, res, next) {
 
 function registerSchema(req, res, next) {
     const schema = Joi.object({
-        internalId: Joi.string(),
+        internalId: Joi.string().allow(null,''),
         title: Joi.string().required(),
         size: Joi.string().required(),
-        jobWalkDate: Joi.string(),
-        jobName1: Joi.string(),
-        jobNo1: Joi.string(),
-        jobName2: Joi.string(),
-        jobNo2: Joi.string(),
+        jobWalkDate: Joi.string().allow(null,''),
+        jobName1: Joi.string().allow(null,''),
+        jobNo1: Joi.string().allow(null,''),
+        jobName2: Joi.string().allow(null,''),
+        jobNo2: Joi.string().allow(null,''),
         companyId: Joi.number().required(),
         desc: Joi.string().required(),
-        isPublic: Joi.boolean(),
-        isPrivate: Joi.boolean(),
-        clName: Joi.string(),
-        clProjLead: Joi.string(),
-        clDueDate: Joi.string(),
-        clNotes: Joi.string()
+        isPublic: Joi.boolean().allow(null,false),
+        isPrivate: Joi.boolean().allow(null,false),
+        clName: Joi.string().allow(null,''),
+        clProjLead: Joi.string().allow(null,''),
+        clDueDate: Joi.string().allow(null,''),
+        clNotes: Joi.string().allow(null,'')
     });
     validateRequest(req, next, schema);
 }

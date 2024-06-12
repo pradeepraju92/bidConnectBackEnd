@@ -10,7 +10,8 @@ function model(sequelize) {
         hash: { type: DataTypes.STRING, allowNull: false },
         phone: { type: DataTypes.STRING, allowNull: true },
         companyId: { type: DataTypes.INTEGER, allowNull: true},
-        jobId: { type: DataTypes.INTEGER, allowNull: true}
+        jobId: { type: DataTypes.INTEGER, allowNull: true},
+        permission: { type: DataTypes.STRING, allowNull: true}
     };
 
     const options = {
