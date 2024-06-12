@@ -1,7 +1,7 @@
 ﻿{
     "dbName": "bidConnectSql",
     "dbConfig": {
-        "server": "localhost",
+        "server": "xt-n-si-tender-sql",
         "options": {
             "port": 1433,
             "trustServerCertificate": true
@@ -9,8 +9,8 @@
         "authentication": {
             "type": "default",
             "options": {
-                "userName": "sa",
-                "password": "12345OHdf%e"
+                "userName": "tentenders",
+                "password": "+if5iuVRhj86h=8"
             }
         }
     },
