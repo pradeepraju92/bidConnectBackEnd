@@ -1,5 +1,5 @@
 ﻿{
-    "dbName": "bidConnectSql",
+    "dbName": "tentendersql",
     "dbConfig": {
         "server": "xt-n-si-tender-sql",
         "options": {
