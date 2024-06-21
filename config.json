@@ -1,7 +1,7 @@
 ﻿{
-    "dbName": "bidConnectSql",
+    "dbName": "xt-n-si-tender-sql",
     "dbConfig": {
-        "server": "xt-n-si-tender-sql",
+        "server": "tentendersql.database.windows.net",
         "options": {
             "port": 1433,
             "trustServerCertificate": true
