@@ -5,6 +5,7 @@ const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const userService = require('./user.service');
+const status = require('http-status');
 
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
@@ -17,6 +18,7 @@ router.get('/:id', authorize(), getById);
 router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id', _delete);
 router.post('/getAllInComp',getAllInComp);
+router.get('healthCheck',healthCheck);
 
 module.exports = router;
 
@@ -26,6 +28,10 @@ function authenticateSchema(req, res, next) {
         password: Joi.string().required()
     });
     validateRequest(req, next, schema);
+}
+
+function healthCheck(req,res,next){
+    return status.OK;
 }
 
 function authenticate(req, res, next) {
