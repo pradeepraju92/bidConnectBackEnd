@@ -5,8 +5,8 @@ const cors = require('cors');
 
 const errorHandler = require('_middleware/error-handler');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
 // api routes
@@ -19,9 +19,6 @@ app.use('/vendorBidInvites',require('./vendorBidInvite/vendorBidInvite.controlle
 
 // global error handler
 app.use(errorHandler);
-
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
 
 // start server
 const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4100;
