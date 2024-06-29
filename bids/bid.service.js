@@ -50,7 +50,7 @@ async function sendEmail(params){
       });
 }
 async function insertDoc(doc){
-        const database = mongoClient.db("TenTenders")
+        const database = mongoClient.db("TenTenders");
         const project = database.collection("project");
         const filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId'],_revNo:doc['_revNo']};
         const options = {upsert: true};
