@@ -28,7 +28,7 @@ jobs:
           npm run test --if-present
           
       - name: Zip artifact for deployment
-        run: Compress-Archive -Path . -Destination release.zip
+        run: Compress-Archive -Path ./bidConnectBackEnd -Destination release.zip
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
