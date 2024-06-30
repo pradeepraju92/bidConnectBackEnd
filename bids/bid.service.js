@@ -30,7 +30,7 @@ async function sendEmail(params){
         service: 'gmail',
         auth: {
           user: '10tenders.business@gmail.com',
-          pass: 'gacvyubcodqptdir'
+          pass: 'hmhr mwef mduk pidx'
         }
       });
       
