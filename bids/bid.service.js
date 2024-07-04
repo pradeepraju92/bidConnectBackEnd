@@ -52,7 +52,10 @@ async function sendEmail(params){
 async function insertDoc(doc){
         const database = mongoClient.db("TenTenders");
         const project = database.collection("project");
-        const filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId'],_revNo:doc['_revNo']};
+        var filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId'],_revNo:doc['_revNo']};
+        if(doc['_vendorId']){
+            filter = {_schemaType:doc['_schemaType'],_projectId:doc['_projectId'],_bidId:doc['_bidId'],_revNo:doc['_revNo'],_vendorId:doc['vendorId']};
+        }
         const options = {upsert: true};
         const result = await project.updateOne(filter,{$set: doc},options);
         return result;
