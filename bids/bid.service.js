@@ -4,10 +4,14 @@ const nodemailer = require('nodemailer');
 const { secret } = require('config.json');
 const db = require('_helpers/db');
 const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://pradeepraju92:NyhyG6X43dRGIdOp@cluster0.iqmwu0t.mongodb.net/";
+const uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1";
 const mongoClient = new MongoClient(uri);
 const fs = require('fs');
 const fsp = require('fs/promises');
+const { BlobServiceClient } = require('@azure/storage-blob');
+const storage_conn_str = 'DefaultEndpointsProtocol=https;AccountName=xtnsitenderstorage;AccountKey=s59LrY1SN98NJEctYlTmAOgeLudjG8setQd0bpKDiDquSgeh0FC6t4hbFP+iN3h+quxEZXCOkxCL+AStJHZnBA==;EndpointSuffix=core.windows.net';
+const src_container = 'uploads'; 
+const dest_container = 'files'; 
 
 module.exports = {
     create,
@@ -36,7 +40,7 @@ async function sendEmail(params){
       
       var mailOptions = {
         from: '10tenders.business@gmail.com',
-        to: params.email,
+        bcc: params.email,
         subject: params.subject,
         text: params.body
       };
@@ -63,7 +67,7 @@ async function insertDoc(doc){
 }
 
 async function uploadFile(params){
-    var oldPath='./uploads/' + params['file']['originalname'];
+    /*var oldPath='./uploads/' + params['file']['originalname'];
     var newPath='./files/' + params['body']['projectId'] + '/' + params['body']['bidId'] + '/' + params['file']['originalname'];
     var dir='./files/' + params['body']['projectId'] + '/' + params['body']['bidId'];
     if (!fs.existsSync(dir)){
@@ -74,7 +78,14 @@ async function uploadFile(params){
         console.log('Successfully renamed - AKA moved!')
       })
     console.log(params['body']['bidId']);
-    return {}
+    return {}*/
+    const blobServiceClient = BlobServiceClient.fromConnectionString(storage_conn_str);
+    const sourceContainerClient = blobServiceClient.getContainerClient(src_container);
+    const sourceBlockBlobClient = sourceContainerClient.getBlockBlobClient(params['res']['req']['file']['originalname']);
+    const destinationContainerClient = blobServiceClient.getContainerClient(dest_container);
+    const destinationBlockBlobClient = destinationContainerClient.getBlockBlobClient(params['body']['projectId'] + '/' + params['body']['bidId'] + '/' + params['res']['req']['file']['originalname']);
+    const sourceBlobUrl = sourceBlockBlobClient.url;
+    await destinationBlockBlobClient.startCopyFromURL(sourceBlobUrl);
 }
 
 async function getSubmittedVendorById(params){
@@ -128,13 +139,20 @@ async function getBidByProject(params) {
 async function getFileList(params) {
     var fileList = [];
     //console.log(params);
-    const folder = './files/' + params['projectId'] + '/' + params['bidId'] + '/';
-    if (fs.existsSync(folder)) {
+    const folder = params['projectId'] + '/' + params['bidId'] + '/';
+    /*if (fs.existsSync(folder)) {
         return await fsp.readdir(folder);
     }
     else{
         return [];
-    }
+    }*/
+    const blobServiceClient = BlobServiceClient.fromConnectionString(storage_conn_str);
+    const destinationContainerClient = blobServiceClient.getContainerClient(dest_container);
+    const iter = destinationContainerClient.listBlobsFlat({prefix:folder});
+    for await (const item of iter) {
+        fileList.push(item.name);
+      }
+      return fileList;
 }
 
 async function create(params) {
