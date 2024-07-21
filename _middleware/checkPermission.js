@@ -15,8 +15,6 @@ function checkPermission() {
             //const userVal = JSON.stringify(user);
             const perm = JSON.parse(user.dataValues.permission);
             var isAuthorized = false;
-            console.log(typeof perm);
-            console.log(perm["permission"]);
             //console.log(user.dataValues.permission);
             // check user still exists
             if (!user){
