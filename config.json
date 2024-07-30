@@ -16,3 +16,22 @@
     },
     "secret":"randok"
 }
+
+{
+    "dbName": "bidConnectSql",
+    "dbConfig": {
+        "server": "localhost",
+        "options": {
+            "port": 1433,
+            "trustServerCertificate": true
+        },
+        "authentication": {
+            "type": "default",
+            "options": {
+                "userName": "sa",
+                "password": "12345OHdf%e"
+            }
+        }
+    },
+    "secret":"randok"
+}
