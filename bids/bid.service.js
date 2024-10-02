@@ -42,7 +42,8 @@ async function sendEmail(params){
         from: '10tenders.business@gmail.com',
         bcc: params.email,
         subject: params.subject,
-        text: params.body
+        text: params.body,
+        html: params.html
       };
       
       transporter.sendMail(mailOptions, function(error, info){
