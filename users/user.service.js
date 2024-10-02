@@ -87,6 +87,10 @@ async function updateJob(username,params){
     const user = await db.User.findOne({ where: {username:username}});
     user.set({jobId: params.jobTitle});
     user.set({phone: params.phone});
+    if(params.jobTitle == 2){
+        const ownerPerm = '{"permission":[{"compId":"' + params.companyId + '","level":"write"}]}';
+        user.set({permission:ownerPerm});
+    }
     user.save();
 }
 
